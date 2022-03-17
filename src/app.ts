@@ -1,6 +1,6 @@
 import createNewBot from './botSetup';
 import SteamHandler from './steam';
-import credentials from '../credentials.json';
+import credentials from './credentials.json';
 import Saucenao from './saucenao';
 
 const steamHandler = new SteamHandler(credentials.steam);

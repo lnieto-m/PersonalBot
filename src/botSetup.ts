@@ -48,9 +48,13 @@ export default function createNewBot(token: string, prefix: string, steamHandler
     commandClient.add({
         name: "sauce",
         run: async (context, args) => {
-            console.log(args);
-            // await saucenaoHandler.GetImageSource(args.sauce);
-            return context.reply("sauced");
+            const embed = new Embed();
+            const sauceNAOData = await saucenaoHandler.GetImageSource(args.sauce);
+            console.log(sauceNAOData);
+            embed.setTitle("Results");
+            embed.setThumbnail(sauceNAOData.thumbnail);
+            embed.setDescription(sauceNAOData.data);
+            return context.editOrReply({embed, reference: true});
         }
     });
     

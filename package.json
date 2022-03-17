@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "axios": "^0.25.0",
     "detritus-client": "^0.16.3",
     "saucenao": "0.0.2",
     "steamapi": "^2.2.0",
