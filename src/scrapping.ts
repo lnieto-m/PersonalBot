@@ -59,14 +59,14 @@ export default class ImageGatherer {
     }
 
     async AddStreamRules(): Promise<void> {
-        // await this.twitterClient.v2.updateStreamRules({
-        //     delete: {
-        //         ids: ['1512852492907859968']
-        //     }
-        // })
+        await this.twitterClient.v2.updateStreamRules({
+            delete: {
+                ids: ['1512855222695215109']
+            }
+        })
         const addedRules = await this.twitterClient.v2.updateStreamRules({
             add: [
-                { value: '(#gawrt OR #FineFaunart) has:images -is:retweet -is:quote', tag: 'fanarts with medias with no retweets or quotes'}
+                { value: '(#gawrt OR #ameliaRT OR #inART OR #callillust OR #artsofashes OR #IRySart OR #illustrayBAE OR #galaxillust OR  #drawMEI OR  #FineFaunart OR  #kronillust) has:images -is:retweet -is:quote -is:reply', tag: 'fanarts with medias with no retweets or quotes'}
             ]
         });
         console.log(addedRules);

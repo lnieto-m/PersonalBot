@@ -100,7 +100,7 @@ export default class CustomClient {
         });
 
         commandClient.add({
-            name: "addRules",
+            name: "addrules",
             run: async (context) => {
                 await this.imagesHandler.AddStreamRules()
             }
