@@ -1,5 +1,4 @@
 import * as mongoDB from "mongodb";
-import credentials from './credentials.json';
 
 export const collections: { vtubers?: mongoDB.Collection } = {};
 

@@ -6,6 +6,10 @@ import ImageGatherer from './scrapping';
 import { collections } from './services';
 import Fanart from './fanart';
 import * as fs from "fs";
+import Path from 'path';
+import axios from 'axios';
+import FormData from 'form-data';
+import { formatDiagnostic } from 'typescript';
 
 export default class CustomClient {
 
@@ -85,11 +89,10 @@ export default class CustomClient {
             }
         });
 
-        // Experimental and not really usefull anymore since youtube banned music bots
         commandClient.add({
-            name: "play",
-            run: (context, args) => {
-                this.imagesHandler.StartMonitoring();
+            name: "start",
+            run: (context) => {
+                this.imagesHandler.StartMonitoring(context);
             }
         });
     
@@ -131,18 +134,17 @@ export default class CustomClient {
             name: "getarchive",
             run: async (context, args) => {
                 const tags = (args.getarchive as string).split(" ");
-                console.log("#1 Tags:", tags);
                 const path = await this.imagesHandler.GetDownloadableArchive(tags, context.message.author.username);
-
-                const tgzData = fs.readFileSync(path.tgzPath);
-                await context.editOrReply({
-                    file: {
-                        filepath: `${path.name}.tgz`,
-                        value: tgzData
-                    },
-                    reference: true
-                });
                 try {
+                    const form = new FormData();
+                    form.append('file', fs.createReadStream(path.tgzPath), path.path);
+                    const response = await axios.post("https://file.io/?expires=1w", form, {
+                        headers: {
+                            ...form.getHeaders()
+                        }
+                    });
+                    console.log(response.data);
+                    await context.reply(response.data.link);
                     fs.rmdirSync(path.path, {recursive: true});
                     fs.unlinkSync(path.tgzPath);
                 } catch (error) {

@@ -1,5 +1,6 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import compressing from 'compressing';
+import { Context } from "detritus-client/lib/command";
 import * as fs from "fs";
 import { ObjectId } from "mongodb";
 import Path from 'path';
@@ -37,8 +38,6 @@ export const TagList = {
     "#galaxillust" : "Sana",
     "#finefaunart": "Fauna" ,
 }
-
-//(#+[a-zA-Z0-9(_)]{1,})
 
 export default class ImageGatherer {
 
@@ -81,6 +80,7 @@ export default class ImageGatherer {
             for (const piece of Fanarts) { await this.DownloadImage(piece.url, dirPath); }
 
             await compressing.tgz.compressDir( Path.resolve(__dirname, dirPath),  Path.resolve(__dirname, `${dirPath}.tgz`));
+            console.log("Archive ready");
         } catch (error) {
             console.error(error);
         }
@@ -95,14 +95,20 @@ export default class ImageGatherer {
     async DownloadImage(url: string, dirName: string): Promise<void>{
         const fileName = url.split('/');
         const path = Path.resolve(__dirname, dirName, fileName[fileName.length - 1]);
+        let response: AxiosResponse;
+
+        try {
+            response = await axios.get(url, {
+                responseType: 'stream'
+            });
+        } catch (error) {
+            console.log(path);
+            console.error(error.response.status);
+            return new Promise((resolve) => resolve());
+        }
+
         const writer = fs.createWriteStream(path);
-
-        const response = await axios.get(url, {
-            responseType: 'stream'
-        });
-
         response.data.pipe(writer);
-
         return new Promise((resolve, reject) => {
             writer.on('finish', resolve);
             writer.on('error', reject);
@@ -167,7 +173,7 @@ export default class ImageGatherer {
         console.log(addedRules);
     }
 
-    async StartMonitoring(): Promise<void> {
+    async StartMonitoring(context: Context): Promise<void> {
         const rules = await this.twitterClient.v2.streamRules({});
         console.log("Applied rules:", rules);
         try {
@@ -184,6 +190,7 @@ export default class ImageGatherer {
             async (eventData) => {
                 try {
                     console.log(eventData);
+                    await context.reply(eventData.data.text);
                     const mediaData = await this._getTweetData(eventData.data.id);
                     const tags = this._parseTags(eventData.data.text);
                     console.log('Twitter Data:', eventData, mediaData);
