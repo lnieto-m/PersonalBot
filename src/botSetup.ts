@@ -5,6 +5,7 @@ import SteamHandler from './steam';
 import ImageGatherer from './scrapping';
 import { collections } from './services';
 import Fanart from './fanart';
+import * as fs from "fs";
 
 export default class CustomClient {
 
@@ -123,6 +124,30 @@ export default class CustomClient {
             run: async (context, args) => {
                 const test = await this.imagesHandler._getTweetData(args.testim);
                 console.log(test);
+            }
+        })
+
+        commandClient.add({
+            name: "getarchive",
+            run: async (context, args) => {
+                const tags = (args.getarchive as string).split(" ");
+                console.log("#1 Tags:", tags);
+                const path = await this.imagesHandler.GetDownloadableArchive(tags, context.message.author.username);
+
+                const tgzData = fs.readFileSync(path.tgzPath);
+                await context.editOrReply({
+                    file: {
+                        filepath: `${path.name}.tgz`,
+                        value: tgzData
+                    },
+                    reference: true
+                });
+                try {
+                    fs.rmdirSync(path.path, {recursive: true});
+                    fs.unlinkSync(path.tgzPath);
+                } catch (error) {
+                    console.error(error);
+                }
             }
         })
 

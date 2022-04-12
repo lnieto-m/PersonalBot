@@ -1,6 +1,4 @@
-import createNewBot from './botSetup';
 import SteamHandler from './steam';
-import credentials from './credentials.json';
 import Saucenao from './saucenao';
 import CustomClient from './botSetup';
 import ImageGatherer from './scrapping';
