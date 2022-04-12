@@ -6,18 +6,12 @@ import ImageGatherer from './scrapping';
 import { collections } from './services';
 import Fanart from './fanart';
 import * as fs from "fs";
-import Path from 'path';
 import axios from 'axios';
 import FormData from 'form-data';
-import { formatDiagnostic } from 'typescript';
 
 export default class CustomClient {
 
     private commandClient: CommandClient;
-    private steamHandler: SteamHandler;
-    private saucenaoHandler: Saucenao;
-    private imagesHandler: ImageGatherer;
-    private voiceConnection: VoiceConnectObject = null;
 
     private _createNewBot(token: string, prefix: string): CommandClient {
         const commandClient = new CommandClient(token, {
@@ -74,20 +68,20 @@ export default class CustomClient {
             }
         });
     
-        commandClient.add({
-            name: "join",
-            onBefore: (context) => context.client.isOwner(context.userId),
-            onCancel: (context) => context.reply("Unauthorized."),
-            run: async (context) => {
-                for (let chan of context.message.guild.voiceStates) {
-                    if (chan[0] === context.message.author.id) {
-                        this.voiceConnection = await context.client.voiceConnect(context.message.guildId, chan[1].channelId);
-                        return context.reply("Joined.");
-                    }
-                }
-                return context.reply("Not connected to a voice channel.");
-            }
-        });
+        // commandClient.add({
+        //     name: "join",
+        //     onBefore: (context) => context.client.isOwner(context.userId),
+        //     onCancel: (context) => context.reply("Unauthorized."),
+        //     run: async (context) => {
+        //         for (let chan of context.message.guild.voiceStates) {
+        //             if (chan[0] === context.message.author.id) {
+        //                 this.voiceConnection = await context.client.voiceConnect(context.message.guildId, chan[1].channelId);
+        //                 return context.reply("Joined.");
+        //             }
+        //         }
+        //         return context.reply("Not connected to a voice channel.");
+        //     }
+        // });
 
         commandClient.add({
             name: "start",
@@ -137,7 +131,7 @@ export default class CustomClient {
                 const path = await this.imagesHandler.GetDownloadableArchive(tags, context.message.author.username);
                 try {
                     const form = new FormData();
-                    form.append('file', fs.createReadStream(path.tgzPath), path.path);
+                    form.append('file', fs.createReadStream(path.tgzPath), `${path.name}.tgz`);
                     const response = await axios.post("https://file.io/?expires=1w", form, {
                         headers: {
                             ...form.getHeaders()
@@ -161,10 +155,7 @@ export default class CustomClient {
         return await this.commandClient.run();
     }
 
-    constructor(token: string, prefix: string, steamHandler: SteamHandler, saucenaoHandler: Saucenao, imagesHandler: ImageGatherer) {
-        this.steamHandler = steamHandler;
-        this.saucenaoHandler = saucenaoHandler;
-        this.imagesHandler = imagesHandler;
+    constructor(token: string, prefix: string,public steamHandler: SteamHandler, public saucenaoHandler: Saucenao, public imagesHandler: ImageGatherer) {
         this.commandClient = this._createNewBot(token, prefix);
     }
 }

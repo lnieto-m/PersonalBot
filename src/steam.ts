@@ -16,7 +16,6 @@ export interface GameData {
 
 export default class SteamHandler {
 
-    private token: string;
     private steam: SteamApi;
 
     async GetUserData(query: string): Promise<SteamApi.PlayerSummary> {
@@ -70,8 +69,7 @@ export default class SteamHandler {
         return gameDetails;
     }
 
-    constructor(token: string) {
-        this.token = token;
+    constructor(private token: string) {
         this.steam = new SteamApi(this.token);
     }
 }

@@ -33,8 +33,6 @@ export interface EmbedData {
 
 export default class Saucenao {
 
-    private token: string;
-
     _convertDataToPrintableString(results: Result[]): EmbedData {
 
         let thumbnail = "";
@@ -79,7 +77,5 @@ export default class Saucenao {
         return printableData;
     }
 
-    constructor(token: string) {
-        this.token = token;
-    }
+    constructor(public token: string) { }
 }
