@@ -26,9 +26,9 @@ app.use('*', function(req, res, next) {
 app.options('*', cors());
 
 app.get('/getFanarts', async (req: Request, res: Response) => {
-    console.log('/getFanartsCalled', req.query);
-    const data = await getFanartWithDates(req.body);
-    res.send(data);
+    console.log('/getFanartsCalled', req.body);
+    // const data = await getFanartWithDates({startDate: req.query.startDate, endDate: req.query.endDate, });
+    res.send('data');
 })
 
 const steamHandler = new SteamHandler(process.env.STEAM);
