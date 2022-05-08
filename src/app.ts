@@ -2,7 +2,7 @@ import SteamHandler from './steam';
 import Saucenao from './saucenao';
 import CustomClient from './botSetup';
 import ImageGatherer from './scrapping';
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { connectToDatabase, getFanartWithDates } from './services';
 import cors, { CorsOptions } from 'cors';
 
@@ -25,7 +25,8 @@ app.use('*', function(req, res, next) {
 //enable pre-flight
 app.options('*', cors());
 
-app.get('/getFanarts', async (req, res) => {
+app.get('/getFanarts', async (req: Request, res: Response) => {
+    console.log('/getFanartsCalled', req.body);
     const data = await getFanartWithDates(req.body);
     res.send(data);
 })
