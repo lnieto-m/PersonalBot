@@ -26,7 +26,7 @@ app.use('*', function(req, res, next) {
 app.options('*', cors());
 
 app.get('/getFanarts', async (req: Request, res: Response) => {
-    console.log('/getFanartsCalled', req.body);
+    console.log('/getFanartsCalled', req);
     const data = await getFanartWithDates(req.body);
     res.send(data);
 })
