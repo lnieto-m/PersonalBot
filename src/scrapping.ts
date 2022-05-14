@@ -44,6 +44,11 @@ export default class ImageGatherer {
     private token: string;
     private twitterClient: TwitterApiReadOnly;
     private dataStream: TweetStream; 
+    private context: Context = null;
+
+    SetContext(ctx: Context) {
+        this.context = ctx;
+    }
 
     Close(): void {
         try {
@@ -173,7 +178,7 @@ export default class ImageGatherer {
         console.log(addedRules);
     }
 
-    async StartMonitoring(context: Context): Promise<void> {
+    async StartMonitoring(): Promise<void> {
         const rules = await this.twitterClient.v2.streamRules({});
         console.log("Applied rules:", rules);
         try {
@@ -190,7 +195,7 @@ export default class ImageGatherer {
             async (eventData) => {
                 try {
                     console.log(eventData);
-                    await context.reply(eventData.data.text);
+                    if (this.context != null) { await this.context.reply(eventData.data.text) };
                     const mediaData = await this._getTweetData(eventData.data.id);
                     const tags = this._parseTags(eventData.data.text);
                     console.log('Twitter Data:', eventData, mediaData);

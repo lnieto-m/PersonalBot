@@ -8,6 +8,7 @@ import Fanart from './fanart';
 import * as fs from "fs";
 import axios from 'axios';
 import FormData from 'form-data';
+import { Context } from 'detritus-client/lib/command';
 
 export default class CustomClient {
 
@@ -86,7 +87,7 @@ export default class CustomClient {
         commandClient.add({
             name: "start",
             run: (context) => {
-                this.imagesHandler.StartMonitoring(context);
+                this.imagesHandler.SetContext(context);
             }
         });
     
@@ -152,6 +153,7 @@ export default class CustomClient {
 
     async run() {
         await this.imagesHandler.Init();
+        await this.imagesHandler.StartMonitoring();
         return await this.commandClient.run();
     }
 
