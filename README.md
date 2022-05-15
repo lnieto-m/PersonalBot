@@ -1,4 +1,4 @@
-# Getting Started with this Bot
+# A simple Discord Bot
 
 This project is a simple web server hosting a Discord bot.   
 Its main purpose is gathering Fanarts posted on Twitter with specific tags, tweet data is then sent to a mongoDB Database which data can be accessed from https://lnieto-m.github.io/db-viewer/ .
