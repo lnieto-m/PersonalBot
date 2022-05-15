@@ -1,4 +1,4 @@
-import { CommandClient, VoiceConnectObject } from 'detritus-client';
+import { CommandClient } from 'detritus-client';
 import { Embed } from 'detritus-client/lib/utils';
 import Saucenao from './saucenao';
 import SteamHandler from './steam';
@@ -8,7 +8,6 @@ import Fanart from './fanart';
 import * as fs from "fs";
 import axios from 'axios';
 import FormData from 'form-data';
-import { Context } from 'detritus-client/lib/command';
 
 export default class CustomClient {
 
@@ -69,23 +68,8 @@ export default class CustomClient {
             }
         });
     
-        // commandClient.add({
-        //     name: "join",
-        //     onBefore: (context) => context.client.isOwner(context.userId),
-        //     onCancel: (context) => context.reply("Unauthorized."),
-        //     run: async (context) => {
-        //         for (let chan of context.message.guild.voiceStates) {
-        //             if (chan[0] === context.message.author.id) {
-        //                 this.voiceConnection = await context.client.voiceConnect(context.message.guildId, chan[1].channelId);
-        //                 return context.reply("Joined.");
-        //             }
-        //         }
-        //         return context.reply("Not connected to a voice channel.");
-        //     }
-        // });
-
         commandClient.add({
-            name: "start",
+            name: "setcontext",
             run: (context) => {
                 this.imagesHandler.SetContext(context);
             }
