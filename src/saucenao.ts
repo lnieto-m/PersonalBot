@@ -55,9 +55,9 @@ export default class Saucenao {
             if (data.data.creator != undefined && creator === "") creator = data.data.creator;
             if (data.data.member_name != undefined && pixivName === "") pixivName = data.data.member_name;
             if (data.data.member_id != undefined && pixivId === 0) pixivId = data.data.member_id;
-            if (data.data.gelbooru_id != undefined && gelbooru_id === 0) pixivId = data.data.gelbooru_id;
-            if (data.data.danbooru_id != undefined && danbooru_id === 0) pixivId = data.data.danbooru_id;
-            if (data.data.yandere_id != undefined && yandere_id === 0) pixivId = data.data.yandere_id;
+            if (data.data.gelbooru_id != undefined && gelbooru_id === 0) gelbooru_id = data.data.gelbooru_id;
+            if (data.data.danbooru_id != undefined && danbooru_id === 0) danbooru_id = data.data.danbooru_id;
+            if (data.data.yandere_id != undefined && yandere_id === 0) yandere_id = data.data.yandere_id;
         }
         console.log(results);
         let printableString = `${characters}\nBy ${creator}`;
