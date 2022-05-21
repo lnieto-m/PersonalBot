@@ -1,7 +1,7 @@
 import SteamHandler from './steam';
 import Saucenao from './saucenao';
 import CustomClient from './botSetup';
-import ImageGatherer from './scrapping';
+import ImageGatherer from './imageHandler';
 import express, { Request, Response } from 'express';
 import { connectToDatabase, getFanartWithDates } from './services';
 import cors, { CorsOptions } from 'cors';
