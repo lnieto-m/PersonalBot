@@ -2,7 +2,7 @@ import { CommandClient } from 'detritus-client';
 import { Embed } from 'detritus-client/lib/utils';
 import Saucenao from './saucenao';
 import SteamHandler from './steam';
-import ImageGatherer from './scrapping';
+import ImageGatherer from './imageHandler';
 import { collections } from './services';
 import Fanart from './fanart';
 import * as fs from "fs";
@@ -61,7 +61,7 @@ export default class CustomClient {
                 const embed = new Embed();
                 const sauceNAOData = await this.saucenaoHandler.GetImageSource(args.sauce);
                 console.log(sauceNAOData);
-                embed.setTitle("Results");
+                embed.setTitle(sauceNAOData.title);
                 embed.setThumbnail(sauceNAOData.thumbnail);
                 embed.setDescription(sauceNAOData.data);
                 return context.editOrReply({embed, reference: true});
