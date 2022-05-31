@@ -34,10 +34,25 @@ app.get('/getFanarts', async (req: Request, res: Response) => {
 app.get('/getUser', async (req: Request, res: Response) => {
     console.log('/getUser', req.query);
     const userData = await commandClient.imagesHandler.GetUserData(req.query.username as string);
+    if (userData.error) {
+        res.send({
+            userData: null,
+            fanartList: null,
+            error: {
+                error: true,
+                title: 'User not found'
+            }
+        })
+        return;
+    }
     const fanartList = await getFanartsByAuthor(req.query.username as string);
     res.send({
-        userData: userData,
-        fanartList: fanartList
+        userData: userData.data,
+        fanartList: fanartList,
+        error: {
+            error: false,
+            title: ''
+        }
     });
 })
 
