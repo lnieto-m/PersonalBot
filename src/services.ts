@@ -35,3 +35,16 @@ export async function getFanartWithDates (params: SearchParams): Promise<Fanart[
         console.error(e);
     }
 }
+
+export async function getFanartsByAuthor(author: string): Promise<Fanart[]> {
+    try {
+        const Fanarts = (await collections.vtubers.find({
+            author: {
+                $eq: author
+            }
+        }).toArray()) as unknown as Fanart[];
+        return Fanarts;
+    } catch(e) {
+        console.error(e);
+    }
+}

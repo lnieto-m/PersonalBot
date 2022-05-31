@@ -3,7 +3,7 @@ import Saucenao from './saucenao';
 import CustomClient from './botSetup';
 import ImageGatherer from './imageHandler';
 import express, { Request, Response } from 'express';
-import { connectToDatabase, getFanartWithDates } from './services';
+import { connectToDatabase, getFanartsByAuthor, getFanartWithDates } from './services';
 import cors, { CorsOptions } from 'cors';
 
 const app = express();
@@ -26,9 +26,19 @@ app.use('*', function(req, res, next) {
 app.options('*', cors());
 
 app.get('/getFanarts', async (req: Request, res: Response) => {
-    console.log('/getFanartsCalled', req.query);
-    const data = await getFanartWithDates({startDate: new Date(req.query.startDate as string), endDate: new Date(req.query.endDate as string), tags: req.query.tags as string[]});
-    res.send(data);
+    console.log('/getFanarts', req.query);
+    const fanartList = await getFanartWithDates({startDate: new Date(req.query.startDate as string), endDate: new Date(req.query.endDate as string), tags: req.query.tags as string[]});
+    res.send(fanartList);
+})
+
+app.get('/getUser', async (req: Request, res: Response) => {
+    console.log('/getUser', req.query);
+    const userData = await commandClient.imagesHandler.GetUserData(req.query.username as string);
+    const fanartList = await getFanartsByAuthor(req.query.username as string);
+    res.send({
+        userData: userData,
+        fanartList: fanartList
+    });
 })
 
 const steamHandler = new SteamHandler(process.env.STEAM);

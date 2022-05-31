@@ -120,6 +120,11 @@ export default class ImageGatherer {
         })
     }
 
+    async GetUserData(username: string) {
+        const userData = await this.twitterClient.v2.userByUsername(username);
+        return userData;
+    }
+
     async _getTweetData(id: string): Promise<TweetData> {
         const tweet = await this.twitterClient.v2.singleTweet(id, {'media.fields': 'url', 'tweet.fields' : ['author_id', 'created_at'], expansions: ['attachments.media_keys', 'author_id']});
         const mediaData = TwitterV2IncludesHelper.media(tweet);
