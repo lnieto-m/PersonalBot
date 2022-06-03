@@ -123,6 +123,7 @@ export default class ImageGatherer {
     async GetUserData(username: string) {
         try{
             const userData = await this.twitterClient.v2.userByUsername(username, {'user.fields': ['profile_image_url', 'description', 'name', 'public_metrics']});
+            if (userData.data === undefined) return {data: null, error: true};
             return {
                 data: userData.data,
                 error: false

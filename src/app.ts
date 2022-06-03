@@ -40,7 +40,7 @@ app.get('/UsersCompletion', async(req: Request, res: Response) => {
 app.get('/User', async (req: Request, res: Response) => {
     console.log('/User', req.query);
     const userData = await commandClient.imagesHandler.GetUserData(req.query.username as string);
-    if (userData.error || !userData) {
+    if (userData.error) {
         res.send({
             userData: null,
             fanartList: null,
@@ -53,6 +53,17 @@ app.get('/User', async (req: Request, res: Response) => {
     }
     console.log(userData);
     const fanartList = await getFanartsByAuthor(userData.data.username);
+    if (fanartList.length <= 0) {
+        res.send({
+            userData: null,
+            fanartList: null,
+            error: {
+                error: true,
+                title: 'User not found'
+            }
+        })
+        return;
+    }
     res.send({
         userData: userData.data,
         fanartList: fanartList,
