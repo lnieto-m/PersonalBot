@@ -40,7 +40,7 @@ app.get('/UsersCompletion', async(req: Request, res: Response) => {
 app.get('/User', async (req: Request, res: Response) => {
     console.log('/User', req.query);
     const userData = await commandClient.imagesHandler.GetUserData(req.query.username as string);
-    if (userData.error) {
+    if (userData.error || !userData) {
         res.send({
             userData: null,
             fanartList: null,
