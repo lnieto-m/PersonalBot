@@ -51,6 +51,7 @@ app.get('/User', async (req: Request, res: Response) => {
         })
         return;
     }
+    console.log(userData);
     const fanartList = await getFanartsByAuthor(userData.data.username);
     res.send({
         userData: userData.data,
