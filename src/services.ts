@@ -50,11 +50,12 @@ export async function getFanartsByAuthor(author: string): Promise<Fanart[]> {
 }
 
 export async function getUserList(query: string): Promise<string[]> {
-    const rgx = new RegExp(`\/${query}\/i`);
+    const rgx = new RegExp(`\/${query}\/gmi`);
     try {
         const authorList = (await collections.vtubers.distinct('author'/*, {author: { $regex: rgx }}*/)) as string[];
         console.log(authorList);
-        return authorList;
+        const filterdList = authorList.filter((value) => rgx.test(value));
+        return filterdList;
     } catch (e) {
         console.error(e);
         return [];
