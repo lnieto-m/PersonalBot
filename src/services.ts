@@ -48,3 +48,15 @@ export async function getFanartsByAuthor(author: string): Promise<Fanart[]> {
         console.error(e);
     }
 }
+
+export async function getUserList(query: string): Promise<string[]> {
+    const rgx = new RegExp(`\/${query}\/i`);
+    try {
+        const authorList = (await collections.vtubers.distinct('author', {author: { $regex: rgx }})) as string[];
+        console.log(authorList);
+        return authorList;
+    } catch (e) {
+        console.error(e);
+        return [];
+    }
+}
