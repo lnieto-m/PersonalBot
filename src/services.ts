@@ -53,7 +53,7 @@ export async function getUserList(query: string): Promise<string[]> {
     try {
         const authorList = (await collections.vtubers.distinct('author'/*, {author: { $regex: rgx }}*/)) as string[];
         console.log(authorList);
-        const filteredList = authorList.filter((value) => value.includes(query));
+        const filteredList = authorList.filter((value) => value.toLowerCase().includes(query.toLowerCase()));
         return filteredList;
     } catch (e) {
         console.error(e);
